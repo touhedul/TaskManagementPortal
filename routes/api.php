@@ -1,6 +1,7 @@
 <?php
 
 use API\EmployeeAPIController;
+use API\TaskAPIController;
 use Illuminate\Http\Request;
 
 /*
@@ -21,3 +22,4 @@ use Illuminate\Http\Request;
 
 Route::post('employees/{id}', [App\Http\Controllers\API\EmployeeAPIController::class, 'update']);
 Route::resource('employees', EmployeeAPIController::class);
+Route::resource('tasks', TaskAPIController::class);

@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Employee;
-use App\Repositories\BaseRepository;
+use App\Repositories\repo\BaseRepository;
 
 /**
  * Class EmployeeRepository

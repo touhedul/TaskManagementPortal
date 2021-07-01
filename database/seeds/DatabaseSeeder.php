@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(AdminSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(SettingSeeder::class);
-        // Employee::factory()->count(10)->create();
+        Employee::factory()->count(4)->create();
     }
 }
