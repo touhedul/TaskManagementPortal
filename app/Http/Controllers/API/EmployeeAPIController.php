@@ -57,10 +57,10 @@ class EmployeeAPIController extends AppBaseController
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateEmployeeAPIRequest $request)
     {
-         $input = $request->all();
-        $imageName = FileHelper::uploadImage($request);
+        $input = $request->all();
+        $imageName = (new FileHelper())->uploadImage($request);
         $employee = $this->employeeRepository->create(array_merge($input, ['image' => $imageName]));
         return $this->sendResponse(new EmployeeResource($employee), 'Employee saved successfully');
     }
@@ -94,22 +94,11 @@ class EmployeeAPIController extends AppBaseController
      *
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmployeeAPIRequest $request, $id)
     {
-        // $input = $request->employee;
-
-        // /** @var Employee $employee */
-        // $employee = $this->employeeRepository->find($id);
-
-        // if (empty($employee)) {
-        //     return $this->sendError('Employee not found');
-        // }
-
-        // $employee = $this->employeeRepository->update($input, $id);
-
         $employee = $this->employeeRepository->find($id);
         $input = $request->all();
-        $imageName = FileHelper::uploadImage($request, $employee);
+        $imageName = (new FileHelper())->uploadImage($request, $employee);
         $employee = $this->employeeRepository->update(array_merge($input, ['image' => $imageName]), $id);
 
         return $this->sendResponse(new EmployeeResource($employee), 'Employee updated successfully');
@@ -134,13 +123,9 @@ class EmployeeAPIController extends AppBaseController
             return $this->sendError('Employee not found');
         }
 
+        FileHelper::deleteImage($employee);
         $employee->delete();
 
         return $this->sendSuccess('Employee deleted successfully');
-    }
-
-    public function check(Request $request, $id)
-    {
-        return $request;
     }
 }

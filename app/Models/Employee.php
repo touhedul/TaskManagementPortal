@@ -51,8 +51,6 @@ class Employee extends Model
     public static $rules = [
         'name' => 'required|string|max:191',
         'email' => 'required|email|max:191',
-        // 'image' => 'required|image|max:10000'
+        'image' => 'required|image|max:10000'
     ];
-
-
 }

@@ -7,7 +7,7 @@ use File;
 
 class FileHelper
 {
-    public static function uploadImage($request, $user = NULL, $type = array(), $width = 50, $height = 50)
+    public function uploadImage($request, $user = NULL, $type = array(), $width = 50, $height = 50)
     {
         $imageName = "";
         if ($user != NULL) {

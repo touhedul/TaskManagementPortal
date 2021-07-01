@@ -3,39 +3,63 @@
     <br />
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <form
-          @submit.prevent="employeeFormSubmit()"
-          enctype="multipart/form-data"
-        >
-          Name
-          <input
-            type="text"
-            required
-            class="form-control"
-            v-model="employee.name"
-            name="name"
-          />
-          Email
-          <input
-            type="email"
-            required
-            class="form-control"
-            v-model="employee.email"
-          />
-          Image
-          <input
-            @change="handleOnChange"
-            type="file"
-            required
-            class="form-control"
-          />
-          <!-- Image <input type="text" class="form-control"/> -->
-          <br />
-          <button class="btn btn-primary" type="submit">{{ button }}</button>
-        </form>
-      </div>
-      <div class="col-md-4">
-        <button class="btn btn-primary">Add Employee</button>
+        <div class="card">
+          <div class="card-header">Employee</div>
+          <div class="card-body">
+            <form
+              @submit.prevent="employeeFormSubmit()"
+              enctype="multipart/form-data"
+            >
+              Name
+              <input
+                type="text"
+                required
+                class="form-control"
+                v-model="employee.name"
+                name="name"
+              />
+              Email
+              <input
+                type="email"
+                required
+                class="form-control"
+                v-model="employee.email"
+              />
+              Image
+              <input
+                @change="handleOnChange"
+                type="file"
+                :required="required ? true : false"
+                class="form-control dropify"
+                ref="fileupload"
+                accept="image/*"
+              />
+              <br />
+              <img
+                :src="'/images/' + this.image"
+                class="img-thumbnail rounded-circle"
+                alt=""
+              />
+              <img
+                v-show="imageUrl"
+                :src="this.imageUrl"
+                class="img-thumbnail rounded-circle"
+                height="100px"
+                width="100px"
+                alt=""
+              />
+              <!-- Image <input type="text" class="form-control"/> -->
+              <br />
+              <p v-show="error" class="form-control alert-danger">
+                Something is Wrong !
+              </p>
+              <button class="btn btn-primary" type="submit">
+                {{ button }}
+              </button>
+              <a class="btn btn-warning" @click="employeeFormReset()">Reset</a>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
     <br />
@@ -43,40 +67,28 @@
       <div
         v-for="empl in employees"
         :key="empl.id"
-        class="col-md-4"
+        class="col-md-6"
         style="margin-top: 20px"
       >
-        <div class="card">
+        <div class="card border-primary">
           <div class="card-header">
             <img
               :src="'/images/' + empl.image"
               class="img-thumbnail rounded-circle"
             />
             {{ empl.name }}
-            <div class="text-right">
+            <span class="float-right">
               <a class="text-right" href="#" title="Edit">
                 <i class="fa fa-edit" @click="editEmployee(empl.id)"> </i>
               </a>
               &nbsp; &nbsp; &nbsp;
-              <a href="#" class="text-right" title="Delete">
+              <a href="#" class="text-right text-danger" title="Delete">
                 <i class="fa fa-trash" @click="deleteEmployee(empl.id)"> </i>
               </a>
-            </div>
+            </span>
           </div>
 
-          <div class="card-body">
-            <p>
-              <input type="checkbox" /> This is a task from manageer<span
-                style="text-align: center"
-                >Edit|Delete</span
-              >
-            </p>
-            <p><input type="checkbox" /> This is a task from manageer</p>
-            <p><input type="checkbox" /> This is a task from manageer</p>
-          </div>
-          <div class="card-footer">
-            <button class="btn btn-success">Add task</button>
-          </div>
+          <task :employeeId="empl.id" />
         </div>
       </div>
     </div>
@@ -84,13 +96,21 @@
 </template>
 
 <script>
+import task from "./task.vue";
 export default {
+  components: {
+    task,
+  },
   data: function () {
     return {
       button: "Add",
       isEdit: false,
       employeeId: "",
       employees: [],
+      required: true,
+      image: "",
+      imageUrl: "",
+      error: false,
       employee: {
         name: "",
         email: "",
@@ -101,6 +121,9 @@ export default {
   methods: {
     handleOnChange(e) {
       this.employee.image = e.target.files[0];
+      this.image = "";
+      const file = e.target.files[0];
+      this.imageUrl = URL.createObjectURL(file);
     },
     employeeFormSubmit() {
       let method = axios.post;
@@ -114,6 +137,14 @@ export default {
     employeeFormReset() {
       this.employee.name = "";
       this.employee.email = "";
+      this.employee.image = "";
+      this.image = "";
+      this.button = "Add";
+      this.$refs.fileupload.value = null;
+      this.isEdit = false;
+      this.required = true;
+      this.error = false;
+      this.imageUrl = "";
     },
     employeeAdd() {
       const formData = new FormData();
@@ -130,6 +161,7 @@ export default {
           this.employeeFetch();
         })
         .catch((error) => {
+          this.error = true;
           console.log(error);
         });
     },
@@ -142,12 +174,14 @@ export default {
         .post("api/employees/" + this.employeeId, formData)
         .then((response) => {
           console.log(response);
-            this.employeeFormReset();
+          this.employeeFormReset();
           this.employeeFetch();
           this.button = "Add";
           this.isEdit = false;
+          this.required = true;
         })
         .catch((error) => {
+          this.error = true;
           console.log(response);
         });
     },
@@ -168,6 +202,7 @@ export default {
           this.employeeFetch();
         })
         .catch((error) => {
+          this.error = true;
           console.log(error);
         });
     },
@@ -177,11 +212,14 @@ export default {
         .then((response) => {
           this.button = "Update";
           this.isEdit = true;
+          this.required = false;
           this.employeeId = id;
           this.employee.name = response.data.data.name;
           this.employee.email = response.data.data.email;
+          this.image = response.data.data.image;
         })
         .catch((error) => {
+          this.error = true;
           console.log(error);
         });
     },
