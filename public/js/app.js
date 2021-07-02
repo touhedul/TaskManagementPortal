@@ -2262,33 +2262,279 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["employeeId"],
   data: function data() {
     return {
-      details: ""
+      button: "Add",
+      isEdit: false,
+      todoCount: 0,
+      doingCount: 0,
+      completeCount: 0,
+      taskId: "",
+      details: "",
+      tasks: [],
+      todoTasks: [],
+      doingTasks: [],
+      completeTasks: []
     };
   },
   methods: {
     taskFormSubmit: function taskFormSubmit() {
+      var method = axios.post;
+      var url = "api/tasks";
+
+      if (this.isEdit == true) {
+        this.taskUpdate();
+      } else {
+        this.taskAdd();
+      }
+    },
+    taskAdd: function taskAdd() {
       var _this = this;
 
       var formData = new FormData();
       formData.set("details", this.details);
       formData.set("employee_id", this.employeeId);
-      axios.post("api/employees", formData).then(function (response) {
+      axios.post("api/tasks", formData).then(function (response) {
         //   this.$emit("reload");
         //   alert('Employee Added Successful.');
         console.log(response);
 
-        _this.employeeFormReset();
+        _this.taskFormReset();
 
-        _this.employeeFetch();
+        _this.taskFetchByEmployee();
       })["catch"](function (error) {
         _this.error = true;
         console.log(error);
       });
+    },
+    taskUpdate: function taskUpdate() {
+      var _this2 = this;
+
+      var formData = new FormData();
+      formData.set("details", this.details);
+      formData.set("employee_id", this.employeeId);
+      axios.put("api/tasks/" + this.taskId, {
+        details: this.details
+      }).then(function (response) {
+        //   this.$emit("reload");
+        //   alert('Employee Added Successful.');
+        console.log(response);
+
+        _this2.taskFormReset();
+
+        _this2.taskFetchByEmployee();
+      })["catch"](function (error) {
+        _this2.error = true;
+        console.log(error);
+      });
+    },
+    taskFetchByEmployee: function taskFetchByEmployee() {
+      var _this3 = this;
+
+      axios.get("api/tasks/employee/" + this.employeeId).then(function (response) {
+        console.log(response);
+        _this3.todoTasks = response.data.data.todoTasks;
+        _this3.todoCount = response.data.data.todoCount;
+        _this3.doingTasks = response.data.data.doingTasks;
+        _this3.doingCount = response.data.data.doingCount;
+        _this3.completeTasks = response.data.data.completeTasks;
+        _this3.completeCount = response.data.data.completeCount;
+      })["catch"](function (error) {
+        console.log(error);
+      }); //   this.taskFetchTodo();
+      //   this.taskFetchDoing();
+      //   this.taskFetchComplete();
+    },
+    taskFetchTodo: function taskFetchTodo() {
+      var _this4 = this;
+
+      axios.get("api/tasks/todo/" + this.employeeId).then(function (response) {
+        _this4.todoTasks = response.data.data[0];
+        _this4.todoCount = response.data.data.todoCount;
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    taskFetchDoing: function taskFetchDoing() {
+      var _this5 = this;
+
+      axios.get("api/tasks/doing/" + this.employeeId).then(function (response) {
+        _this5.doingTasks = response.data.data[0];
+        _this5.doingCount = response.data.data.doingCount;
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    taskFetchComplete: function taskFetchComplete() {
+      var _this6 = this;
+
+      axios.get("api/tasks/complete/" + this.employeeId).then(function (response) {
+        _this6.completeTasks = response.data.data[0];
+        _this6.completeCount = response.data.data.completeCount;
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    taskDelete: function taskDelete(id) {
+      var _this7 = this;
+
+      axios["delete"]("api/tasks/" + id).then(function (response) {
+        _this7.taskFetchByEmployee();
+      })["catch"](function (error) {
+        _this7.error = true;
+        console.log(error);
+      });
+    },
+    taskEdit: function taskEdit(id) {
+      var _this8 = this;
+
+      axios.get("api/tasks/" + id).then(function (response) {
+        _this8.details = response.data.data.details;
+        _this8.taskId = response.data.data.id;
+        _this8.button = "Update";
+        _this8.isEdit = true;
+        console.log(response);
+      })["catch"](function (error) {
+        _this8.error = true;
+        console.log(error);
+      });
+    },
+    taskChangeStatus: function taskChangeStatus(id, status) {
+      var _this9 = this;
+
+      axios.post("api/tasks/change-status/" + id + "/" + status).then(function (response) {
+        _this9.taskFetchByEmployee();
+
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    taskFormReset: function taskFormReset() {
+      this.details = "";
+      this.button = "Add";
+      this.isEdit = false;
     }
+  },
+  created: function created() {
+    this.taskFetchByEmployee();
   }
 });
 
@@ -38116,166 +38362,430 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "card-body" }, [
-      _c(
-        "form",
-        {
-          staticClass: "form",
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.taskFormSubmit()
-            }
-          }
-        },
-        [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.details,
-                expression: "details"
-              }
-            ],
-            staticClass: "form-control mb-2 mr-sm-2",
-            attrs: {
-              type: "text",
-              required: "",
-              id: "inlineFormInputName2",
-              placeholder: "Write the task..."
-            },
-            domProps: { value: _vm.details },
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      [
+        _c(
+          "form",
+          {
+            staticClass: "form",
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.details = $event.target.value
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.taskFormSubmit()
               }
             }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
+          },
+          [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.details,
+                  expression: "details"
+                }
+              ],
+              staticClass: "form-control mb-2 mr-sm-2",
+              attrs: {
+                type: "text",
+                required: "",
+                id: "inlineFormInputName2",
+                placeholder: "Write the task..."
+              },
+              domProps: { value: _vm.details },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.details = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.employeeId,
+                  expression: "employeeId"
+                }
+              ],
+              attrs: { type: "hidden" },
+              domProps: { value: _vm.employeeId },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.employeeId = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.taskId,
+                  expression: "taskId"
+                }
+              ],
+              attrs: { type: "hidden" },
+              domProps: { value: _vm.taskId },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.taskId = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.employeeId,
-                expression: "employeeId"
-              }
-            ],
-            attrs: { type: "text" },
-            domProps: { value: _vm.employeeId },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.employeeId = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm._m(0)
-        ]
-      ),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v("\n    TO Do (0)\n    "),
-      _c("br"),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("p", [
-        _c("input", { attrs: { type: "checkbox" } }),
-        _vm._v(" This is a task from manageer\n      "),
-        _c("span", { staticClass: "float-right" }, [
-          _c(
-            "a",
-            { staticClass: "text-right", attrs: { href: "#", title: "Edit" } },
-            [
-              _c("i", {
-                staticClass: "fa fa-edit",
-                on: {
-                  click: function($event) {
-                    return _vm.editEmployee(_vm.empl.id)
+                staticClass: "btn btn-success mb-2 float-right",
+                attrs: { type: "submit" }
+              },
+              [
+                _c("i", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdit,
+                      expression: "!isEdit"
+                    }
+                  ],
+                  staticClass: "fa fa-plus"
+                }),
+                _vm._v(" " + _vm._s(_vm.button) + "\n      ")
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v("\n    TO Do (" + _vm._s(_vm.todoCount) + ")\n    "),
+        _c("br"),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _vm._l(_vm.todoTasks, function(task, index) {
+          return _c("p", { key: task.id }, [
+            _vm._v(
+              "\n      " +
+                _vm._s(index + 1) +
+                ". " +
+                _vm._s(task.details) +
+                "\n      "
+            ),
+            _c("span", { staticClass: "float-right" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dropdown-toggle",
+                  attrs: {
+                    href: "#",
+                    role: "button",
+                    id: "dropdownMenuLink",
+                    "data-toggle": "dropdown",
+                    "aria-haspopup": "true",
+                    "aria-expanded": "false"
                   }
-                }
-              })
-            ]
-          ),
-          _vm._v("\n             \n        "),
-          _c(
-            "a",
-            {
-              staticClass: "text-right text-danger",
-              attrs: { href: "#", title: "Delete" }
-            },
-            [
-              _c("i", {
-                staticClass: "fa fa-trash",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteEmployee(_vm.empl.id)
+                },
+                [_vm._v("\n          Action\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { "aria-labelledby": "dropdownMenuLink" }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 1)
+                        }
+                      }
+                    },
+                    [_vm._v("Move to Doing")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 2)
+                        }
+                      }
+                    },
+                    [_vm._v("Mark as Complete")]
+                  )
+                ]
+              ),
+              _vm._v("\n           \n        "),
+              _c(
+                "a",
+                {
+                  staticClass: "text-right",
+                  attrs: { href: "javascript:void(0);", title: "Edit" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-edit",
+                    on: {
+                      click: function($event) {
+                        return _vm.taskEdit(task.id)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v("\n           \n        "),
+              _c(
+                "a",
+                {
+                  staticClass: "text-right text-danger",
+                  attrs: { href: "javascript:void(0);", title: "Delete" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-trash",
+                    on: {
+                      click: function($event) {
+                        return _vm.taskDelete(task.id)
+                      }
+                    }
+                  })
+                ]
+              )
+            ])
+          ])
+        }),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v("\n    Doing (" + _vm._s(_vm.doingCount) + ")\n    "),
+        _c("hr"),
+        _vm._v(" "),
+        _vm._l(_vm.doingTasks, function(task, index) {
+          return _c("p", { key: task.id }, [
+            _vm._v(
+              "\n      " +
+                _vm._s(index + 1) +
+                ". " +
+                _vm._s(task.details) +
+                "\n      "
+            ),
+            _c("span", { staticClass: "float-right" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dropdown-toggle",
+                  attrs: {
+                    href: "#",
+                    role: "button",
+                    id: "dropdownMenuLink",
+                    "data-toggle": "dropdown",
+                    "aria-haspopup": "true",
+                    "aria-expanded": "false"
                   }
-                }
-              })
-            ]
-          )
-        ])
-      ])
-    ]),
+                },
+                [_vm._v("\n          Action\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { "aria-labelledby": "dropdownMenuLink" }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 0)
+                        }
+                      }
+                    },
+                    [_vm._v("Move to Todo")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 2)
+                        }
+                      }
+                    },
+                    [_vm._v("Mark as Complete")]
+                  )
+                ]
+              ),
+              _vm._v("\n           \n        "),
+              _c(
+                "a",
+                {
+                  staticClass: "text-right",
+                  attrs: { href: "javascript:void(0);", title: "Edit" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-edit",
+                    on: {
+                      click: function($event) {
+                        return _vm.taskEdit(task.id)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v("\n           \n        "),
+              _c(
+                "a",
+                {
+                  staticClass: "text-right text-danger",
+                  attrs: { href: "javascript:void(0);", title: "Delete" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-trash",
+                    on: {
+                      click: function($event) {
+                        return _vm.taskDelete(task.id)
+                      }
+                    }
+                  })
+                ]
+              )
+            ])
+          ])
+        })
+      ],
+      2
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "card-footer" }, [
-      _vm._v("\n    Completed(0)\n    "),
-      _c("br"),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("p", [
-        _c("input", { attrs: { type: "checkbox" } }),
-        _vm._v(" This is a task from manageer\n      "),
-        _c("span", { staticClass: "float-right" }, [
-          _vm._v("\n             \n        "),
-          _c(
-            "a",
-            {
-              staticClass: "text-right text-danger",
-              attrs: { href: "#", title: "Delete" }
-            },
-            [
-              _c("i", {
-                staticClass: "fa fa-trash",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteEmployee(_vm.empl.id)
+    _c(
+      "div",
+      { staticClass: "card-footer" },
+      [
+        _vm._v("\n    Completed(" + _vm._s(_vm.completeCount) + ")\n    "),
+        _c("br"),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _vm._l(_vm.completeTasks, function(task, index) {
+          return _c("p", { key: task.id, staticClass: "text-primary" }, [
+            _vm._v(
+              "\n\n      " +
+                _vm._s(index + 1) +
+                ". " +
+                _vm._s(task.details) +
+                "\n      "
+            ),
+            _c("span", { staticClass: "float-right" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dropdown-toggle",
+                  attrs: {
+                    href: "#",
+                    role: "button",
+                    id: "dropdownMenuLink",
+                    "data-toggle": "dropdown",
+                    "aria-haspopup": "true",
+                    "aria-expanded": "false"
                   }
-                }
-              })
-            ]
-          )
-        ]),
-        _vm._v("\n      " + _vm._s(_vm.employeeId) + "\n    ")
-      ])
-    ])
+                },
+                [_vm._v("\n          Action\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { "aria-labelledby": "dropdownMenuLink" }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 0)
+                        }
+                      }
+                    },
+                    [_vm._v("Move to Todo")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.taskChangeStatus(task.id, 2)
+                        }
+                      }
+                    },
+                    [_vm._v("Move to Doing")]
+                  )
+                ]
+              ),
+              _vm._v("\n           \n        "),
+              _c(
+                "a",
+                {
+                  staticClass: "text-right text-danger",
+                  attrs: { href: "javascript:void(0);", title: "Delete" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fa fa-trash",
+                    on: {
+                      click: function($event) {
+                        return _vm.taskDelete(task.id)
+                      }
+                    }
+                  })
+                ]
+              )
+            ])
+          ])
+        })
+      ],
+      2
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-success mb-2 float-right",
-        attrs: { type: "submit" }
-      },
-      [_c("i", { staticClass: "fa fa-plus" }), _vm._v(" Add\n      ")]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

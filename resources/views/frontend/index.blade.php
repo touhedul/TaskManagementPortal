@@ -34,10 +34,11 @@
 
 <body>
     <div id="app">
+        
         {{-- <div class="container"> --}}
-            <main class="py-2">
-                <app></app>
-            </main>
+        <main class="py-2">
+            <app></app>
+        </main>
         {{-- </div> --}}
     </div>
 </body>
