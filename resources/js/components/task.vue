@@ -7,7 +7,6 @@
           v-model="details"
           required
           class="form-control mb-2 mr-sm-2"
-          id="inlineFormInputName2"
           placeholder="Write the task..."
         />
         <input type="hidden" v-model="employeeId" />
@@ -248,42 +247,42 @@ export default {
       //   this.taskFetchDoing();
       //   this.taskFetchComplete();
     },
-    taskFetchTodo() {
-      axios
-        .get("api/tasks/todo/" + this.employeeId)
-        .then((response) => {
-          this.todoTasks = response.data.data[0];
-          this.todoCount = response.data.data.todoCount;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    taskFetchDoing() {
-      axios
-        .get("api/tasks/doing/" + this.employeeId)
-        .then((response) => {
-          this.doingTasks = response.data.data[0];
-          this.doingCount = response.data.data.doingCount;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    taskFetchComplete() {
-      axios
-        .get("api/tasks/complete/" + this.employeeId)
-        .then((response) => {
-          this.completeTasks = response.data.data[0];
-          this.completeCount = response.data.data.completeCount;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // taskFetchTodo() {
+    //   axios
+    //     .get("api/tasks/todo/" + this.employeeId)
+    //     .then((response) => {
+    //       this.todoTasks = response.data.data[0];
+    //       this.todoCount = response.data.data.todoCount;
+    //       console.log(response);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+    // taskFetchDoing() {
+    //   axios
+    //     .get("api/tasks/doing/" + this.employeeId)
+    //     .then((response) => {
+    //       this.doingTasks = response.data.data[0];
+    //       this.doingCount = response.data.data.doingCount;
+    //       console.log(response);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+    // taskFetchComplete() {
+    //   axios
+    //     .get("api/tasks/complete/" + this.employeeId)
+    //     .then((response) => {
+    //       this.completeTasks = response.data.data[0];
+    //       this.completeCount = response.data.data.completeCount;
+    //       console.log(response);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
     taskDelete(id) {
       axios
         .delete("api/tasks/" + id)

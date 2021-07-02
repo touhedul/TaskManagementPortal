@@ -36,6 +36,7 @@
               />
               <br />
               <img
+                v-if="previewImage"
                 :src="'/images/' + this.image"
                 class="img-thumbnail rounded-circle"
                 alt=""
@@ -104,6 +105,7 @@ export default {
   data: function () {
     return {
       button: "Add",
+      previewImage: false,
       isEdit: false,
       employeeId: "",
       employees: [],
@@ -196,15 +198,17 @@ export default {
         });
     },
     deleteEmployee(id) {
-      axios
-        .delete("api/employees/" + id)
-        .then((response) => {
-          this.employeeFetch();
-        })
-        .catch((error) => {
-          this.error = true;
-          console.log(error);
-        });
+      if (confirm("Do you really want to delete?")) {
+        axios
+          .delete("api/employees/" + id)
+          .then((response) => {
+            this.employeeFetch();
+          })
+          .catch((error) => {
+            this.error = true;
+            console.log(error);
+          });
+      }
     },
     editEmployee(id) {
       axios
@@ -217,6 +221,7 @@ export default {
           this.employee.name = response.data.data.name;
           this.employee.email = response.data.data.email;
           this.image = response.data.data.image;
+          this.previewImage = true;
         })
         .catch((error) => {
           this.error = true;

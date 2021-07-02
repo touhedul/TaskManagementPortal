@@ -70,26 +70,26 @@ class TaskApiController extends Controller
         );
     }
 
-    public function todo($employeeId)
-    {
-        $tasks = $this->taskRepository->todo($employeeId);
-        $todoCount = count($tasks);
-        return $this->jsonResponse([TaskResource::collection($tasks), 'todoCount' => $todoCount], 'Task retrieved successfully', 200);
-    }
+    // public function todo($employeeId)
+    // {
+    //     $tasks = $this->taskRepository->todo($employeeId);
+    //     $todoCount = count($tasks);
+    //     return $this->jsonResponse([TaskResource::collection($tasks), 'todoCount' => $todoCount], 'Task retrieved successfully', 200);
+    // }
 
-    public function doing($employeeId)
-    {
-        $tasks = $this->taskRepository->doing($employeeId);
-        $doingCount = count($tasks);
-        return $this->jsonResponse([TaskResource::collection($tasks), 'doingCount' => $doingCount], 'Task retrieved successfully', 200);
-    }
+    // public function doing($employeeId)
+    // {
+    //     $tasks = $this->taskRepository->doing($employeeId);
+    //     $doingCount = count($tasks);
+    //     return $this->jsonResponse([TaskResource::collection($tasks), 'doingCount' => $doingCount], 'Task retrieved successfully', 200);
+    // }
 
-    public function complete($employeeId)
-    {
-        $tasks = $this->taskRepository->complete($employeeId);
-        $completeCount = count($tasks);
-        return $this->jsonResponse([TaskResource::collection($tasks), 'completeCount' => $completeCount], 'Task retrieved successfully', 200);
-    }
+    // public function complete($employeeId)
+    // {
+    //     $tasks = $this->taskRepository->complete($employeeId);
+    //     $completeCount = count($tasks);
+    //     return $this->jsonResponse([TaskResource::collection($tasks), 'completeCount' => $completeCount], 'Task retrieved successfully', 200);
+    // }
 
     public function changeStatus($id, $status)
     {
