@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\TaskRequest;
+use App\Http\Requests\API\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Interfaces\TaskInterface;
 use App\Models\Employee;
@@ -13,7 +13,7 @@ use App\Repositories\TaskRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class TaskApiController extends Controller
+class TaskAPIController extends Controller
 {
     private $taskRepository;
 
