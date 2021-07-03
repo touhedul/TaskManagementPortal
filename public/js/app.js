@@ -2066,10 +2066,6 @@ __webpack_require__.r(__webpack_exports__);
       formData.set("name", this.employee.name);
       formData.set("email", this.employee.email);
       axios.post("api/employees", formData).then(function (response) {
-        //   this.$emit("reload");
-        //   alert('Employee Added Successful.');
-        console.log(response);
-
         _this.employeeFormReset();
 
         _this.employeeFetch();
@@ -2086,8 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.set("name", this.employee.name);
       formData.set("email", this.employee.email);
       axios.post("api/employees/" + this.employeeId, formData).then(function (response) {
-        console.log(response);
-
+        //   console.log(response);
         _this2.employeeFormReset();
 
         _this2.employeeFetch();
@@ -2097,14 +2092,14 @@ __webpack_require__.r(__webpack_exports__);
         _this2.required = true;
       })["catch"](function (error) {
         _this2.error = true;
-        console.log(response);
+        console.log(error);
       });
     },
     employeeFetch: function employeeFetch() {
       var _this3 = this;
 
       axios.get("api/employees").then(function (response) {
-        console.log(response);
+        //   console.log(response);
         _this3.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -2452,10 +2447,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.set("details", this.details);
       formData.set("employee_id", this.employeeId);
       axios.post("api/tasks", formData).then(function (response) {
-        //   this.$emit("reload");
-        //   alert('Employee Added Successful.');
-        console.log(response);
-
+        //   console.log(response);
         _this.taskFormReset();
 
         _this.taskFetchByEmployee();
@@ -2473,10 +2465,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.put("api/tasks/" + this.taskId, {
         details: this.details
       }).then(function (response) {
-        //   this.$emit("reload");
-        //   alert('Employee Added Successful.');
-        console.log(response);
-
+        //   console.log(response);
         _this2.taskFormReset();
 
         _this2.taskFetchByEmployee();
@@ -2489,7 +2478,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.get("api/tasks/employee/" + this.employeeId).then(function (response) {
-        console.log(response);
+        //   console.log(response);
         _this3.todoTasks = response.data.data.todoTasks;
         _this3.todoCount = response.data.data.todoCount;
         _this3.doingTasks = response.data.data.doingTasks;
@@ -2498,46 +2487,8 @@ __webpack_require__.r(__webpack_exports__);
         _this3.completeCount = response.data.data.completeCount;
       })["catch"](function (error) {
         console.log(error);
-      }); //   this.taskFetchTodo();
-      //   this.taskFetchDoing();
-      //   this.taskFetchComplete();
+      });
     },
-    // taskFetchTodo() {
-    //   axios
-    //     .get("api/tasks/todo/" + this.employeeId)
-    //     .then((response) => {
-    //       this.todoTasks = response.data.data[0];
-    //       this.todoCount = response.data.data.todoCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-    // taskFetchDoing() {
-    //   axios
-    //     .get("api/tasks/doing/" + this.employeeId)
-    //     .then((response) => {
-    //       this.doingTasks = response.data.data[0];
-    //       this.doingCount = response.data.data.doingCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-    // taskFetchComplete() {
-    //   axios
-    //     .get("api/tasks/complete/" + this.employeeId)
-    //     .then((response) => {
-    //       this.completeTasks = response.data.data[0];
-    //       this.completeCount = response.data.data.completeCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
     taskDelete: function taskDelete(id) {
       var _this4 = this;
 
@@ -2555,8 +2506,7 @@ __webpack_require__.r(__webpack_exports__);
         _this5.details = response.data.data.details;
         _this5.taskId = response.data.data.id;
         _this5.button = "Update";
-        _this5.isEdit = true;
-        console.log(response);
+        _this5.isEdit = true; //   console.log(response);
       })["catch"](function (error) {
         _this5.error = true;
         console.log(error);
@@ -2566,9 +2516,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this6 = this;
 
       axios.post("api/tasks/change-status/" + id + "/" + status).then(function (response) {
-        _this6.taskFetchByEmployee();
+        _this6.taskFetchByEmployee(); //   console.log(response);
 
-        console.log(response);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -51626,31 +51575,10 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
 Vue.component('app', __webpack_require__(/*! ./components/app.vue */ "./resources/js/components/app.vue")["default"]);
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
 var app = new Vue({
   el: '#app'
 });

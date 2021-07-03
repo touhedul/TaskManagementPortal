@@ -156,9 +156,6 @@ export default {
       axios
         .post("api/employees", formData)
         .then((response) => {
-          //   this.$emit("reload");
-          //   alert('Employee Added Successful.');
-          console.log(response);
           this.employeeFormReset();
           this.employeeFetch();
         })
@@ -175,7 +172,7 @@ export default {
       axios
         .post("api/employees/" + this.employeeId, formData)
         .then((response) => {
-          console.log(response);
+        //   console.log(response);
           this.employeeFormReset();
           this.employeeFetch();
           this.button = "Add";
@@ -184,14 +181,14 @@ export default {
         })
         .catch((error) => {
           this.error = true;
-          console.log(response);
+          console.log(error);
         });
     },
     employeeFetch() {
       axios
         .get("api/employees")
         .then((response) => {
-          console.log(response);
+        //   console.log(response);
           this.employees = response.data.data;
         })
         .catch((error) => {
