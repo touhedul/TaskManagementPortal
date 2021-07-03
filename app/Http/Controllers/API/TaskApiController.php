@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Interfaces\TaskInterface;
 use App\Models\Employee;
@@ -26,7 +27,7 @@ class TaskApiController extends Controller
         return $this->taskRepository->all();
     }
 
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
         $task = $this->taskRepository->create($request->all());
         return $this->jsonResponse(new TaskResource($task), 'Task saved successfully', 201);
@@ -38,7 +39,7 @@ class TaskApiController extends Controller
         return $this->jsonResponse(new TaskResource($task), 'Task retrieved successfully', 200);
     }
 
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
         $task = $this->taskRepository->update($request->all(), $id);
         return $this->jsonResponse(new TaskResource($task), 'Task update successfully', 200);
@@ -69,27 +70,6 @@ class TaskApiController extends Controller
             200
         );
     }
-
-    // public function todo($employeeId)
-    // {
-    //     $tasks = $this->taskRepository->todo($employeeId);
-    //     $todoCount = count($tasks);
-    //     return $this->jsonResponse([TaskResource::collection($tasks), 'todoCount' => $todoCount], 'Task retrieved successfully', 200);
-    // }
-
-    // public function doing($employeeId)
-    // {
-    //     $tasks = $this->taskRepository->doing($employeeId);
-    //     $doingCount = count($tasks);
-    //     return $this->jsonResponse([TaskResource::collection($tasks), 'doingCount' => $doingCount], 'Task retrieved successfully', 200);
-    // }
-
-    // public function complete($employeeId)
-    // {
-    //     $tasks = $this->taskRepository->complete($employeeId);
-    //     $completeCount = count($tasks);
-    //     return $this->jsonResponse([TaskResource::collection($tasks), 'completeCount' => $completeCount], 'Task retrieved successfully', 200);
-    // }
 
     public function changeStatus($id, $status)
     {
