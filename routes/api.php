@@ -1,6 +1,7 @@
 <?php
 
 
+
 // Employee Routes
 Route::post('employees/{id}', [App\Http\Controllers\API\EmployeeAPIController::class, 'update']);
 Route::resource('employees', App\Http\Controllers\API\EmployeeAPIController::class);
