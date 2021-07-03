@@ -197,9 +197,7 @@ export default {
       axios
         .post("api/tasks", formData)
         .then((response) => {
-          //   this.$emit("reload");
-          //   alert('Employee Added Successful.');
-          console.log(response);
+          //   console.log(response);
           this.taskFormReset();
           this.taskFetchByEmployee();
         })
@@ -217,9 +215,7 @@ export default {
           details: this.details,
         })
         .then((response) => {
-          //   this.$emit("reload");
-          //   alert('Employee Added Successful.');
-          console.log(response);
+          //   console.log(response);
           this.taskFormReset();
           this.taskFetchByEmployee();
         })
@@ -232,7 +228,7 @@ export default {
       axios
         .get("api/tasks/employee/" + this.employeeId)
         .then((response) => {
-          console.log(response);
+          //   console.log(response);
           this.todoTasks = response.data.data.todoTasks;
           this.todoCount = response.data.data.todoCount;
           this.doingTasks = response.data.data.doingTasks;
@@ -243,46 +239,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      //   this.taskFetchTodo();
-      //   this.taskFetchDoing();
-      //   this.taskFetchComplete();
     },
-    // taskFetchTodo() {
-    //   axios
-    //     .get("api/tasks/todo/" + this.employeeId)
-    //     .then((response) => {
-    //       this.todoTasks = response.data.data[0];
-    //       this.todoCount = response.data.data.todoCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-    // taskFetchDoing() {
-    //   axios
-    //     .get("api/tasks/doing/" + this.employeeId)
-    //     .then((response) => {
-    //       this.doingTasks = response.data.data[0];
-    //       this.doingCount = response.data.data.doingCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-    // taskFetchComplete() {
-    //   axios
-    //     .get("api/tasks/complete/" + this.employeeId)
-    //     .then((response) => {
-    //       this.completeTasks = response.data.data[0];
-    //       this.completeCount = response.data.data.completeCount;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
+
     taskDelete(id) {
       axios
         .delete("api/tasks/" + id)
@@ -302,7 +260,7 @@ export default {
           this.taskId = response.data.data.id;
           this.button = "Update";
           this.isEdit = true;
-          console.log(response);
+          //   console.log(response);
         })
         .catch((error) => {
           this.error = true;
@@ -314,7 +272,7 @@ export default {
         .post("api/tasks/change-status/" + id + "/" + status)
         .then((response) => {
           this.taskFetchByEmployee();
-          console.log(response);
+          //   console.log(response);
         })
         .catch((error) => {
           console.log(error);

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -32,7 +31,6 @@
         {{-- <div class="container"> --}}
         <main class="py-2">
             <app></app>
-            <loader></loader>
         </main>
         {{-- </div> --}}
     </div>
