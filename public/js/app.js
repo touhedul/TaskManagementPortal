@@ -2137,6 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.get("api/employees").then(function (response) {
+        console.log(response);
         _this3.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);

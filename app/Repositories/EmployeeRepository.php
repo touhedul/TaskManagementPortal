@@ -2,41 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\EmployeeInterface;
 use App\Models\Employee;
-use App\Repositories\repo\BaseRepository;
 
-/**
- * Class EmployeeRepository
- * @package App\Repositories
- * @version June 30, 2021, 9:51 am +06
-*/
-
-class EmployeeRepository extends BaseRepository
+class EmployeeRepository extends BaseRepository implements EmployeeInterface
 {
-    /**
-     * @var array
-     */
-    protected $fieldSearchable = [
-        'name',
-        'email',
-        'image'
-    ];
+    protected $model;
 
-    /**
-     * Return searchable fields
-     *
-     * @return array
-     */
-    public function getFieldsSearchable()
+    public function __construct(Employee $employee)
     {
-        return $this->fieldSearchable;
+        $this->model = $employee;
     }
 
-    /**
-     * Configure the Model
-     **/
-    public function model()
+    public function latestEmployee()
     {
-        return Employee::class;
+        return $this->model->latest()->get();
     }
+
 }

@@ -9,7 +9,9 @@ use App\Models\Employee;
 use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
+use App\Interfaces\EmployeeInterface;
 use Response;
 
 use Image;
@@ -20,80 +22,37 @@ use File;
  * @package App\Http\Controllers\API
  */
 
-class EmployeeAPIController extends AppBaseController
+class EmployeeAPIController extends Controller
 {
-    /** @var  EmployeeRepository */
+
     private $employeeRepository;
 
-    public function __construct(EmployeeRepository $employeeRepo)
+    public function __construct(EmployeeInterface $employeeRepository)
     {
-        $this->employeeRepository = $employeeRepo;
+        $this->employeeRepository = $employeeRepository;
     }
 
-    /**
-     * Display a listing of the Employee.
-     * GET|HEAD /employees
-     *
-     * @param Request $request
-     * @return Response
-     */
     public function index(Request $request)
     {
-        $employees = $this->employeeRepository->model()::latest()->get();
-        // $employees = $this->employeeRepository->all(
-        //     $request->except(['skip', 'limit']),
-        //     $request->get('skip'),
-        //     $request->get('limit')
-        // );
-
-        return $this->sendResponse(EmployeeResource::collection($employees), 'Employees retrieved successfully');
+        $employees = $this->employeeRepository->latestEmployee();
+        return $this->jsonResponse(EmployeeResource::collection($employees), 'Employees retrieved successfully', 200);
+        // return $this->sendResponse(EmployeeResource::collection($employees), 'Employees retrieved successfully');
     }
 
-    /**
-     * Store a newly created Employee in storage.
-     * POST /employees
-     *
-     * @param CreateEmployeeAPIRequest $request
-     *
-     * @return Response
-     */
     public function store(CreateEmployeeAPIRequest $request)
     {
         $input = $request->all();
         $imageName = (new FileHelper())->uploadImage($request);
         $employee = $this->employeeRepository->create(array_merge($input, ['image' => $imageName]));
-        return $this->sendResponse(new EmployeeResource($employee), 'Employee saved successfully');
+        return $this->jsonResponse(new EmployeeResource($employee), 'Employee saved successfully',201);
     }
 
-    /**
-     * Display the specified Employee.
-     * GET|HEAD /employees/{id}
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
     public function show($id)
     {
-        /** @var Employee $employee */
         $employee = $this->employeeRepository->find($id);
-
-        if (empty($employee)) {
-            return $this->sendError('Employee not found');
-        }
-
-        return $this->sendResponse(new EmployeeResource($employee), 'Employee retrieved successfully');
+        return $this->jsonResponse(new EmployeeResource($employee), 'Employee retrieved successfully',200);
     }
 
-    /**
-     * Update the specified Employee in storage.
-     * PUT/PATCH /employees/{id}
-     *
-     * @param int $id
-     * @param UpdateEmployeeAPIRequest $request
-     *
-     * @return Response
-     */
     public function update(UpdateEmployeeAPIRequest $request, $id)
     {
         $employee = $this->employeeRepository->find($id);
@@ -101,31 +60,16 @@ class EmployeeAPIController extends AppBaseController
         $imageName = (new FileHelper())->uploadImage($request, $employee);
         $employee = $this->employeeRepository->update(array_merge($input, ['image' => $imageName]), $id);
 
-        return $this->sendResponse(new EmployeeResource($employee), 'Employee updated successfully');
+        return $this->jsonResponse(new EmployeeResource($employee), 'Employee updated successfully',200);
     }
 
-    /**
-     * Remove the specified Employee from storage.
-     * DELETE /employees/{id}
-     *
-     * @param int $id
-     *
-     * @throws \Exception
-     *
-     * @return Response
-     */
     public function destroy($id)
     {
-        /** @var Employee $employee */
         $employee = $this->employeeRepository->find($id);
-
-        if (empty($employee)) {
-            return $this->sendError('Employee not found');
-        }
 
         FileHelper::deleteImage($employee);
         $employee->delete();
 
-        return $this->sendSuccess('Employee deleted successfully');
+        return $this->jsonResponse([],'Employee deleted successfully',200);
     }
 }
