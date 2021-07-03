@@ -16,12 +16,7 @@
         "laravel/tinker": "^2.5",
         "appslabke/lara-izitoast": "^1.1",
         "intervention/image": "^2.5",
-        "laravel/socialite": "^5.1",
-        "spatie/laravel-backup": "^6.8",
-        "yajra/laravel-datatables": "^1.5",
-        "infyomlabs/laravel-generator": "8.0.x-dev",
         "laravelcollective/html": "^6.2",
-        "infyomlabs/adminlte-templates": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -30,7 +25,7 @@
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3",
-        
+
         "barryvdh/laravel-debugbar": "^3.2",
         "barryvdh/laravel-ide-helper": "^2.8",
         "fzaninotto/faker": "^1.4",
@@ -51,7 +46,7 @@
             "App\\": "app/"
         },
          "files": [
-        "app/Helpers/GlobalHelper.php" 
+        "app/Helpers/GlobalHelper.php"
         ],
         "classmap": [
             "database/seeds",

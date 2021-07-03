@@ -1,10 +1,4 @@
-{{-- @extends('layouts.frontend')
-@section('title','Home')
-@section('content')
-<h3>Laravel 8</h3>
-<example-component/>
-<employee></employee>
-@endsection --}}
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
